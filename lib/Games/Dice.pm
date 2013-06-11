@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package Games::Dice;
 {
-  $Games::Dice::VERSION = '0.04';
+  $Games::Dice::VERSION = '0.041';
 }
 # ABSTRACT: Perl module to simulate die rolls
 
@@ -13,6 +13,9 @@ our @EXPORT_OK = qw( roll roll_array);
 
 # Preloaded methods go here.
 
+# Win32 has crummy built in rand() support
+# So let's use something that's decent and pure perl
+use if $^O eq "MSWin32", 'Math::Random::MT::Perl' => qw(rand);
 
 sub roll ($) {
     my($line, $dice_string, $sign, $offset, $sum, @throws, @result);
@@ -108,7 +111,7 @@ Games::Dice - Perl module to simulate die rolls
 
 =head1 VERSION
 
-version 0.04
+version 0.041
 
 =head1 SYNOPSIS
 
@@ -142,13 +145,13 @@ the result to an int after dividing.) Using b in this slot is a little
 different: it's short for "best" and indicates "roll a number of dice,
 but add together only the best few". For example, 5d6b3 rolls five six-
 sided dice and adds together the three best rolls. This is sometimes
-used, for example, in roll-playing to give higher averages.
+used, for example, in role-playing to give higher averages.
 
 Generally, C<roll> probably provides the nicer interface, since it does
 the adding up itself. However, in some situations one may wish to
 process the individual rolls (for example, I am told that in the game
 Feng Shui, the number of dice to be rolled cannot be determined in
-advance but depends on whether any 6's were rolled); in such a case, one
+advance but depends on whether any 6s were rolled); in such a case, one
 can use C<roll_array> to return an array of values, which can then be
 examined or processed in an application-dependent manner.
 
@@ -176,7 +179,7 @@ Ricardo Signes <rjbs@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 1999 by Philip Newtno.
+This software is Copyright (c) 1999 by Philip Newton.
 
 This is free software, licensed under:
 

@@ -5,6 +5,7 @@ META.json
 META.yml
 Makefile.PL
 README
+bin/roll
 dist.ini
 lib/Games/Dice.pm
 t/00-compile.t

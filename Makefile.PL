@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-
+use 5.010;
 
 use ExtUtils::MakeMaker 6.30;
 
@@ -16,11 +16,14 @@ my %WriteMakefileArgs = (
     "ExtUtils::MakeMaker" => "6.30"
   },
   "DISTNAME" => "Games-Dice",
-  "EXE_FILES" => [],
+  "EXE_FILES" => [
+    "bin/roll"
+  ],
   "LICENSE" => "mit",
   "NAME" => "Games::Dice",
   "PREREQ_PM" => {
     "Exporter" => 0,
+    "if" => 0,
     "strict" => 0,
     "warnings" => 0
   },
@@ -29,7 +32,7 @@ my %WriteMakefileArgs = (
     "File::Temp" => 0,
     "Test::More" => "0.96"
   },
-  "VERSION" => "0.04",
+  "VERSION" => "0.041",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -64,6 +67,10 @@ unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
 
 delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
   unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
+
+if ( $^O eq 'MSWin32' ) {
+	$WriteMakefileArgs{PREREQ_PM}{'Math::Random::MT::Perl'} = '1.1';
+}
 
 WriteMakefile(%WriteMakefileArgs);
 
