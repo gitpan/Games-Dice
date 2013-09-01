@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package Games::Dice;
 {
-  $Games::Dice::VERSION = '0.042';
+  $Games::Dice::VERSION = '0.043';
 }
 # ABSTRACT: Perl module to simulate die rolls
 
@@ -111,7 +111,7 @@ Games::Dice - Perl module to simulate die rolls
 
 =head1 VERSION
 
-version 0.042
+version 0.043
 
 =head1 SYNOPSIS
 

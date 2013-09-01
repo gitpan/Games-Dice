@@ -22,19 +22,18 @@ my %WriteMakefileArgs = (
   "LICENSE" => "mit",
   "NAME" => "Games::Dice",
   "PREREQ_PM" => {
-    "Exporter" => "0",
-    "if" => "0",
-    "strict" => "0",
-    "warnings" => "0"
+    "Exporter" => 0,
+    "if" => 0,
+    "strict" => 0,
+    "warnings" => 0
   },
   "TEST_REQUIRES" => {
-    "File::Spec" => "0",
-    "IO::Handle" => "0",
-    "IPC::Open3" => "0",
+    "Capture::Tiny" => 0,
     "Test::More" => "0.96",
-    "Test::Script" => "1.05"
+    "Test::Script" => "1.05",
+    "blib" => 0
   },
-  "VERSION" => "0.042",
+  "VERSION" => "0.043",
   "test" => {
     "TESTS" => "t/*.t"
   }

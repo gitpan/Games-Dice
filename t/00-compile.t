@@ -1,42 +1,33 @@
 use strict;
 use warnings;
 
-# this test was generated with Dist::Zilla::Plugin::Test::Compile 2.019
+# This test was generated via Dist::Zilla::Plugin::Test::Compile 2.018
 
 use Test::More 0.88;
 
 
 
-my @module_files = (
-    'Games/Dice.pm'
+use Capture::Tiny qw{ capture };
+
+my @module_files = qw(
+Games/Dice.pm
 );
 
-my @scripts = (
-    'bin/roll'
+my @scripts = qw(
+bin/roll
 );
 
 # no fake home requested
 
-use IPC::Open3;
-use IO::Handle;
-use File::Spec;
-
 my @warnings;
 for my $lib (@module_files)
 {
-    open my $stdout, '>', File::Spec->devnull or die $!;
-    open my $stdin, '<', File::Spec->devnull or die $!;
-    my $stderr = IO::Handle->new;
-
-    my $pid = open3($stdin, $stdout, $stderr, qq{$^X -Mblib -e"require q[$lib]"});
-    waitpid($pid, 0);
-    is($? >> 8, 0, "$lib loaded ok");
-
-    if (my @_warnings = <$stderr>)
-    {
-        warn @_warnings;
-        push @warnings, @_warnings;
-    }
+    my ($stdout, $stderr, $exit) = capture {
+        system($^X, '-Mblib', '-e', qq{require q[$lib]});
+    };
+    is($?, 0, "$lib loaded ok");
+    warn $stderr if $stderr;
+    push @warnings, $stderr if $stderr;
 }
 
 use Test::Script 1.05;
