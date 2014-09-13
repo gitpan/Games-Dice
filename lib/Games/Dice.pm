@@ -1,11 +1,8 @@
 use strict;
 use warnings;
 package Games::Dice;
-{
-  $Games::Dice::VERSION = '0.043';
-}
 # ABSTRACT: Perl module to simulate die rolls
-
+$Games::Dice::VERSION = '0.044';
 require Exporter;
 
 our @ISA = qw(Exporter);
@@ -21,6 +18,8 @@ sub roll ($) {
     my($line, $dice_string, $sign, $offset, $sum, @throws, @result);
 
     $line = shift;
+
+    return $line if $line =~ /\A[0-9]+\z/;
 
     return undef unless $line =~ m{
                  ^              # beginning of line
@@ -75,6 +74,8 @@ sub roll_array ($) {
 
     $line = shift;
 
+    return $line if $line =~ /\A[0-9]+\z/;
+
     return undef unless $line =~ m{
                  ^      # beginning of line
                  (\d+)? # optional count in $1
@@ -101,9 +102,9 @@ sub roll_array ($) {
 
 1;
 
-__END__
-
 =pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -111,7 +112,7 @@ Games::Dice - Perl module to simulate die rolls
 
 =head1 VERSION
 
-version 0.043
+version 0.044
 
 =head1 SYNOPSIS
 
@@ -186,3 +187,58 @@ This is free software, licensed under:
   The MIT (X11) License
 
 =cut
+
+__END__
+
+#pod =head1 NAME
+#pod
+#pod
+#pod =head1 SYNOPSIS
+#pod
+#pod   use Games::Dice 'roll';
+#pod   $strength = roll '3d6+1';
+#pod
+#pod   use Games::Dice 'roll_array';
+#pod   @rolls = roll_array '4d8';
+#pod
+#pod =head1 DESCRIPTION
+#pod
+#pod Games::Dice simulates die rolls. It uses a function-oriented (not
+#pod object-oriented) interface. No functions are exported by default. At
+#pod present, there are two functions which are exportable: C<roll> and
+#pod C<roll_array>. The latter is used internally by C<roll>, but can also be
+#pod exported by itself.
+#pod
+#pod The number and type of dice to roll is given in a style which should be
+#pod familiar to players of popular role-playing games: I<a>dI<b>[+-*/b]I<c>.
+#pod I<a> is optional and defaults to 1; it gives the number of dice to roll.
+#pod I<b> indicates the number of sides to each die; the most common,
+#pod cube-shaped die is thus a d6. % can be used instead of 100 for I<b>;
+#pod hence, rolling 2d% and 2d100 is equivalent. C<roll> simulates I<a> rolls
+#pod of I<b>-sided dice and adds together the results. The optional end,
+#pod consisting of one of +-*/b and a number I<c>, can modify the sum of the
+#pod individual dice. +-*/ are similar in that they take the sum of the rolls
+#pod and add or subtract I<c>, or multiply or divide the sum by I<c>. (x can
+#pod also be used instead of *.) Hence, 1d6+2 gives a number in the range
+#pod 3..8, and 2d4*10 gives a number in the range 20..80. (Using / truncates
+#pod the result to an int after dividing.) Using b in this slot is a little
+#pod different: it's short for "best" and indicates "roll a number of dice,
+#pod but add together only the best few". For example, 5d6b3 rolls five six-
+#pod sided dice and adds together the three best rolls. This is sometimes
+#pod used, for example, in role-playing to give higher averages.
+#pod
+#pod Generally, C<roll> probably provides the nicer interface, since it does
+#pod the adding up itself. However, in some situations one may wish to
+#pod process the individual rolls (for example, I am told that in the game
+#pod Feng Shui, the number of dice to be rolled cannot be determined in
+#pod advance but depends on whether any 6s were rolled); in such a case, one
+#pod can use C<roll_array> to return an array of values, which can then be
+#pod examined or processed in an application-dependent manner.
+#pod
+#pod This having been said, comments and additions (especially if accompanied
+#pod by code!) to Games::Dice are welcome. So, using the above example, if
+#pod anyone wishes to contribute a function along the lines of roll_feng_shui
+#pod to become part of Games::Dice (or to support any other style of die
+#pod rolling), you can contribute it to the author's address, listed below.
+#pod
+#pod =cut
